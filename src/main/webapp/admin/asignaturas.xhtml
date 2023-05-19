@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<f:facet name="first">
+		<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+		<title>Asignaturas</title>
+		<h:outputStylesheet name="style.css" library="css" />
+	</f:facet>
+</h:head>
+<h:body>
+	<ui:composition template="admin.xhtml" >
+		<ui:define name="contentAdmin">
+			<div style="height: 100%; padding: 1em;">
+				<h2>Asignaturas</h2>
+				<div class="card">
+				
+					<h:form>
+						<p:growl id="msgs" showDetail="true"
+							skipDetailIfEqualsSummary="true" />
+
+							<div class="col-12">
+								<p:commandButton icon="pi pi-plus" title="View" oncomplete="PF('dlgAsignatura').show()"
+									value="Nueva asignatura" styleClass="rounded-button ui-button-secondary"/>
+							</div>
+							
+						<div class="card">
+							<p:dataTable id="tblAsignatura" var="asignatura"
+								value="#{asignaturasView.asignaturas}" rowIndexVar="i">
+								<p:column headerText="N°">
+									<h:outputText value="#{i+1}" />
+								</p:column>
+
+								<p:column headerText="Asignatura">
+									<h:outputText value="#{asignatura.nombre}" />
+								</p:column>
+								
+								<p:column headerText="Detalle">
+									<h:outputText value="#{asignatura.detalle}" />
+								</p:column>
+
+
+								<p:column style="width:10rem;text-align: center">
+									<p:commandButton action="#{asignaturasView.eliminarAsignatura(i)}" styleClass="rounded-button ui-button-danger" icon="pi pi-trash" style="margin-right: 5px;">
+							            <p:confirm header="Confirmacion" message="Seguro de que quieres borrar este registro?" icon="pi pi-info-circle"/>
+							        </p:commandButton>
+								
+									<p:commandButton title="Editar" icon="pi pi-pencil" action="#{asignaturasView.seleccionarAsignatura(i)}" oncomplete="PF('dlgAsignatura').show()" update="frmAsignatura" styleClass="rounded-button ui-button-warning"/>
+								</p:column>
+								
+							</p:dataTable>
+						</div>
+					</h:form>
+					
+					
+					<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+			            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
+			            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" />
+			        </p:confirmDialog>
+			        
+					
+					<p:dialog header="Crear Asignatura" widgetVar="dlgAsignatura"
+						modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+						<p:outputPanel id="teacherDetail" style="text-align:center;">
+							<div class="card">
+								<h:form id="frmAsignatura">
+									<h:panelGrid columns="2" cellpadding="5">
+						        	 	<div class="card">
+						        	 		<h:form>
+												<h5>Nombre de la asignatura</h5>
+												<span class="ui-float-label">
+													<p:inputText id="txtAsignatura" value="#{asignaturasView.asignatura.nombre}" required="true">												
+													</p:inputText>
+												</span>
+												<h5>Jornada:</h5>
+												<span class="ui-float-label">
+													<p:inputText id="txtDetalle" value="#{asignaturasView.asignatura.detalle}" required="true">												
+													</p:inputText>
+												</span>
+												
+						        	 		</h:form>
+						        	 	</div>
+						            	</h:panelGrid>						            
+									<p:divider />
+
+									<p:commandButton value="Guardar"
+										action="#{asignaturasView.guardarAsignatura}" icon="pi pi-save"
+										style="width: 50%" styleClass="rounded-button ui-button-success" >
+									</p:commandButton>
+								</h:form>
+							</div>
+						</p:outputPanel>
+					</p:dialog>
+					
+				</div>
+			</div>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

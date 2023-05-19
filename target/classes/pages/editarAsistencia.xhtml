@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<f:facet name="first">
+		<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+		<title>Asistencia</title>
+		<h:outputStylesheet name="style.css" library="css" />
+	</f:facet>
+</h:head>
+
+<h:body>
+	<ui:composition template="index.xhtml">
+		<ui:define name="content">
+			<div style="height: 100%; padding: 1em;">
+				<h2>Asistencia de la fecha : <h:outputText value="#{editarAsistenciaView.convertirFecha(editarAsistenciaView.fechaAsistencia.fecha)}"/></h2>
+				<div class="card">
+					<h:form id="form">
+
+						<p:growl id="message" showDetail="true" />
+						
+						<div class="grid mt-3">
+							<div class="col-12">
+								<p:commandButton icon="pi pi-plus" title="View"
+									value="Agregar Estudiante" oncomplete="PF('dlgNuevaAsistencia').show()" />
+							</div>
+						</div>
+
+						<div class="card">
+							<p:dataTable id="tbleditarNota" var="asistencia"
+								value="#{editarAsistenciaView.asistencias}" rowIndexVar="i" editable="true"
+								editMode="cell" widgetVar="cellNotas">
+
+								<p:ajax event="cellEdit"
+									listener="#{editarAsistenciaView.editarCelda}"
+									update=":form:message" />
+
+								<p:column headerText="N°">
+									<h:outputText value="#{i+1}" />
+								</p:column>
+
+								<p:column headerText="Estudiante">
+									<p:cellEditor>
+										<f:facet name="output">
+											<h:outputText value="#{asistencia.idMatriculaDetalle.idEstudiante.apellido}  #{asistencia.idMatriculaDetalle.idEstudiante.nombre}" />
+										</f:facet>
+										<f:facet name="input">
+											<p:inputText id="txtApellido" value="#{asistencia.idMatriculaDetalle.idEstudiante.apellido} #{asistencia.idMatriculaDetalle.idEstudiante.nombre} "  
+												style="width:100%" disabled="true"/>
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+								
+								<p:column headerText="Asistencia">
+									<p:cellEditor>
+										<f:facet name="output">
+											<h:outputText value="#{editarAsistenciaView.mostrarDetalle(asistencia.asistencia)}" />
+										</f:facet>
+										<f:facet name="input">
+											<p:selectOneMenu value="#{asistencia.asistencia}">
+												<f:selectItem itemLabel="Falta" itemValue="0" />
+												<f:selectItem itemLabel="Atraso" itemValue="1" />
+												<f:selectItem itemLabel="Presente" itemValue="2" />
+											</p:selectOneMenu>
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+
+							</p:dataTable>
+						</div>
+
+					</h:form>
+					
+					
+					<p:dialog header="Informacion de las Asistencias" widgetVar="dlgNuevaAsistencia"
+						modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+						<p:outputPanel id="teacherDetail" style="text-align:center;">
+							<div class="card">
+								<h:form>
+									<h:panelGrid columns="2" cellpadding="5">
+										<div class="card">
+											<h:form>
+												<h5>Seleccione el Estudiante</h5>
+												<div class="col-12 md:col-6 lg:col-4 xl:col-3">
+													<p:selectOneListbox id="cbxTipoNota"
+														value="#{editarAsistenciaView.idMatriculaDetalle}" filter="true"
+														filterMatchMode="contains">
+														<f:selectItems value="#{editarAsistenciaView.estudiantes}" var="estudiante"
+															itemLabel="#{estudiante.idEstudiante.apellido} #{estudiante.idEstudiante.nombre}"
+															itemValue="#{estudiante.idMatriculaDetalle}" />
+													</p:selectOneListbox>
+												</div>
+											</h:form>
+										</div>
+									</h:panelGrid>
+
+
+									<p:divider />
+
+									<p:commandButton value="Guardar"
+										action="#{editarAsistenciaView.crearAsistenciaEstudiante}" icon="pi pi-save"
+										style="width: 50%">
+									</p:commandButton>
+								</h:form>
+							</div>
+						</p:outputPanel>
+					</p:dialog>
+
+
+				</div>
+			</div>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

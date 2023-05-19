@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<f:facet name="first">
+		<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+		<title>Sistema Control de Notas</title>
+		
+	</f:facet>
+	<style>
+    		#frame-title{
+    			width: 100%;
+    			height: 100%;
+    			padding: 0;
+    			margin: 0;
+    			display: flex;
+    			justify-content: center;
+    			align-content: center;
+    			background-color: #30A9CA;
+    			color: #fff;
+    		}
+    		#frame-title h2{
+    			margin: 10px;
+    		}
+    	</style>
+</h:head>
+
+<h:body>
+	<div class="card" style="margin: 0px; padding: 0">
+    	<p:splitter style="height: 60px" layout="vertical">
+	        <p:splitterPanel >
+	            <div id="frame-title">
+	            	<h2>Sistema de Control de asistencia</h2>
+	            </div>
+	        </p:splitterPanel>
+	    </p:splitter>
+		    <p:splitter style="height: 89vh; margin: 0;" styleClass="mb-5">
+		        <p:splitterPanel styleClass="flex align-items-center justify-content-center" size="0">
+		            <div class="card">
+					    <h:form>
+					        <p:growl>
+					            <p:autoUpdate/>
+					        </p:growl>
+					         <p:tabMenu activeIndex="#{param.i}" style="width:10rem; height: 100%; " orientation="left">
+					         	<p:menuitem value="Matricular" outcome="matricula.xhtml" icon="pi pi-book">
+						            <f:param name="i" value="0"/>
+						        </p:menuitem>
+						        <p:menuitem value="Notas" icon="pi pi-list" outcome="notas.xhtml">
+						            <f:param name="i" value="1"/>
+						        </p:menuitem>
+						       	<p:menuitem value="Asistencia" icon="pi pi-check-square" outcome="asistencias.xhtml">
+						            <f:param name="i" value="2"/>
+						        </p:menuitem>
+						        <p:menuitem value="Perfil" icon="pi pi-cog" outcome="perfil.xhtml">
+						            <f:param name="i" value="3"/>
+						        </p:menuitem>
+						        <p:menuitem value="Reportes" icon="pi pi-bookmark-fill" outcome="reportes.xhtml">
+						            <f:param name="i" value="4"/>
+						        </p:menuitem>
+						        <p:menuitem value="Cerrar Sesion"  icon="pi pi-sign-out" action="#{loginView.cerrarSesion}" onsuccess="location.reload()">
+						        </p:menuitem>
+						    </p:tabMenu>
+					    </h:form>
+					</div>
+		        </p:splitterPanel>
+		        <p:splitterPanel styleClass="flex align-items-center justify-content-center" size="100">
+		            <ui:insert name="content"/>
+		        </p:splitterPanel>
+		    </p:splitter>
+		</div>
+</h:body>
+</html>

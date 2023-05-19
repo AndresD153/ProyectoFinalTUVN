@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<f:facet name="first">
+		<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+		<title>Asistencias</title>
+		<h:outputStylesheet name="style.css" library="css" />
+	</f:facet>
+</h:head>
+
+<h:body>
+	<ui:composition template="index.xhtml">
+		<ui:define name="content">
+			<div style="height: 100%; padding: 1em;">
+				<div class="card">
+					<div class="card">
+						<p:dataTable var="estudiante"
+							value="#{reporteNotasView.estudiantes}">
+							<f:facet name="header">
+					            Lista de Notas
+					        </f:facet>
+
+							<p:column headerText="Nombre" style="width:200px;">
+								<h:outputText
+									value="#{estudiante.idEstudiante.apellido} #{estudiante.idEstudiante.nombre}" />
+							</p:column>
+
+							<p:column
+								headerText="Nota1| Nota 2| Nota 3| Nota 4| EXINT| Nota 5| Nota 6| Nota 7| Nota 8| EXFI| PFIN">
+								<div
+									style="display: flex; flex-direction: row; justify-content: flex-start;">
+									<p:repeat
+										value="#{reporteNotasView.listaNotas(estudiante.idMatriculaDetalle)}"
+										var="nota">
+										<div
+											style="width: 57px; border-right: 2px solid #C3C3C3; padding-left: 5px">
+											<h:outputText value="#{nota.nota}" />
+										</div>
+									</p:repeat>
+								</div>
+							</p:column>
+
+							<f:facet name="footer">
+								<span class="font-bold">In total there are</span>
+							</f:facet>
+						</p:dataTable>
+					</div>
+				</div>
+			</div>
+
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

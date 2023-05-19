@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:head>
+    </h:head>
+
+    <h:body>
+    	<ui:composition template="index.xhtml">
+			<ui:define name="content">
+				<div style="height: 100%; padding: 1em;">
+					<h2>Matricular Alumnos - <p:outputLabel value="#{matriculaDetalleView.matricula.idAsignatura.nombre}"></p:outputLabel></h2>
+					<h:form>
+						<p:outputPanel id="matriculaDetalle">
+								<p:outputLabel for="cbxCarrera" value="Seleccione la carrera: "/>
+						<p:selectOneMenu id="cbxCarrera" value="#{matriculaDetalleView.idCarrera}" style="width:300px">
+							<p:ajax listener="#{matriculaDetalleView.seleccionarCarrera}" update="dtFuente"/>
+							<f:selectItem itemLabel="Seleccionar" itemValue="0" noSelectionOption="true"/>
+							<f:selectItems value="#{matriculaDetalleView.carreras}" var="carrera" itemValue="#{carrera.idCarrera}" itemLabel="#{carrera.nombre}" />
+						</p:selectOneMenu>
+						</p:outputPanel>
+					</h:form>
+					
+					<div style="display: flex; flex-direction: row;">
+					<h:form id="dtFuente" >
+						<div class="card">
+					        <h4>Lista de alumnos</h4>
+					        <p:dataTable var="estudiante" value="#{matriculaDetalleView.estudiantesFuente}" 
+					        			rows="10" paginator="true" paginatorPosition="both" style="width: 95%" rowIndexVar="i">
+					            <p:column headerText="N°" style="width: 3em">
+					                <h:outputText value="#{i + 1}" />
+					            </p:column>
+					
+					            <p:column headerText="Name" filterBy="#{estudiante.apellido}">
+					                <h:outputText value="#{estudiante.apellido} #{estudiante.nombre}" />
+					            </p:column>
+					
+					            <p:column style="width:3rem;text-align: center">
+					                <p:commandButton icon="pi pi-plus" title="View" 
+					                				action="#{matriculaDetalleView.agregarEstudiante}"
+					                				styleClass="ui-button-success" update="dtTarget">
+					                    <f:setPropertyActionListener value="#{estudiante}"
+					                                                 target="#{matriculaDetalleView.estudiante}"/>
+					                </p:commandButton>
+					            </p:column>
+					        </p:dataTable>
+					    </div>
+				    </h:form>
+				     
+				    <h:form id="dtTarget" >
+						<div class="card">
+						
+							<p:growl id="message" showDetail="true"/>
+						
+							<p:commandButton value="Guardar" action="#{matriculaDetalleView.guardar}" update="message" styleClass="mr-2" icon="pi pi-save">
+					            <p:confirm header="Confirmación" message="¿Seguro que desea insertar los campos?" icon="pi pi-exclamation-triangle"/>
+					        </p:commandButton>
+					        
+					         <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" responsive="true" width="350">
+					            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-flat"/>
+					            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" />
+					        </p:confirmDialog>
+					        
+					        <p:dataTable var="estudiante" value="#{matriculaDetalleView.estudianteObjetivo}" 
+					        			rows="10" paginator="true" paginatorPosition="both" style="width: 95%" rowIndexVar="i">
+					            <p:column headerText="Code" style="width: 3em">
+					                <h:outputText value="#{i + 1}" />
+					            </p:column>
+					
+					            <p:column headerText="Nombre">
+					                <h:outputText value="#{estudiante.apellido} #{estudiante.nombre}" />
+					            </p:column>
+					
+					            <p:column style="width:3rem;text-align: center">
+					                <p:commandButton icon="pi pi-minus" title="View" action="#{matriculaDetalleView.removerEstudiante(i)}"
+					                				styleClass="ui-button-danger" update="dtTarget">
+					                </p:commandButton>
+					            </p:column>
+					        </p:dataTable>
+					    </div>
+				    </h:form>				     
+					</div>
+				</div>
+			</ui:define>
+		</ui:composition>
+    </h:body>
+</html>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<f:facet name="first">
+		<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+		<title>Notas</title>
+		<h:outputStylesheet name="style.css" library="css" />
+	</f:facet>
+</h:head>
+
+<h:body>
+	<ui:composition template="index.xhtml">
+		<ui:define name="content">
+			<div style="height: 100%; padding: 1em;">
+				<h2>Notas</h2>
+				<div class="card">
+					<h:form id="form">
+		
+							
+							<p:growl id="message" showDetail="true"/>
+							
+							<div class="grid mt-3">
+						    	<div class="col-12">
+						      		<p:commandButton icon="pi pi-plus" title="View" value="Nueva Nota"  oncomplete="PF('dlgNota').show()"/>
+						      		<p:button icon="pi pi-bookmark-fill" title="View" value="Ver Notas" outcome="reporteNotas.xhtml" style="margin-left:10px">
+						      			<f:param name="i" value="1"/>
+										<f:param name="matricula" value="#{notasView.matricula.codigo}"/>
+						      		</p:button>
+						        </div>
+						    </div>
+
+						<div class="card">
+							<p:dataTable id="tblMatricula" var="nota"
+								value="#{notasView.notas}">
+								
+								<p:column headerText="Descripcion">
+									<h:outputText value="#{nota[2]}" />
+								</p:column>
+
+								<p:column headerText="Estudiantes registradas">
+									<h:outputText value="#{nota[3]}" />
+								</p:column>
+
+								<p:column style="width:3rem;text-align: center">
+									<p:button  icon="pi pi-search" outcome="editarNotas"
+										title="View">
+										<f:param name="i" value="1"/>
+										<f:param name="matricula" value="#{nota[0]}"/>
+										<f:param name="tipoNota" value="#{nota[1]}"/>
+										
+									</p:button>
+								</p:column>
+							</p:dataTable>
+						</div>
+					</h:form>
+					
+					<p:dialog header="Informacion de las Notas" widgetVar="dlgNota"
+						modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+						<p:outputPanel id="teacherDetail" style="text-align:center;">
+							<div class="card">
+								<h:form>
+									<h:panelGrid columns="2" cellpadding="5">
+						        	 	<div class="card">
+						        	 		<h:form>
+						        	 			<h5>Seleccione la Nota</h5>
+										        <div class="col-12 md:col-6 lg:col-4 xl:col-3">
+													<p:selectOneListbox id="cbxTipoNota"
+														value="#{notasView.idTipoNota}" filter="true"
+														filterMatchMode="contains">
+														<f:selectItems value="#{notasView.tipoNotas}" var="notas"
+															itemLabel="#{notas.tipoNombre}"
+															itemValue="#{notas.idTipoNota}" />
+													</p:selectOneListbox>
+												</div>
+						        	 		</h:form>
+						        	 	</div>
+						            	</h:panelGrid>
+						            
+
+									<p:divider />
+
+									<p:commandButton value="Guardar"
+										action="#{notasView.crearNotas}" icon="pi pi-save"
+										style="width: 50%">
+									</p:commandButton>
+								</h:form>
+							</div>
+						</p:outputPanel>
+					</p:dialog>
+				</div>
+			</div>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

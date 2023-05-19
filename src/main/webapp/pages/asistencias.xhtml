@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<f:facet name="first">
+		<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+		<title>Asistencias</title>
+		<h:outputStylesheet name="style.css" library="css" />
+	</f:facet>
+</h:head>
+
+<h:body>
+	<ui:composition template="index.xhtml">
+		<ui:define name="content">
+			<div style="height: 100%; padding: 1em;">
+				<h2>Asistencias</h2>
+				<div class="card">
+					<h:form id="form">
+						<p:growl id="msgs" showDetail="true"
+							skipDetailIfEqualsSummary="true" />
+
+
+						<div class="card">
+							<p:dataTable id="tblMatricula" var="matricula"
+								value="#{matriculaView.matriculas}">
+								<p:column headerText="Codigo">
+									<h:outputText value="#{matricula.codigo}" />
+								</p:column>
+
+								<p:column headerText="Materia">
+									<h:outputText value="#{matricula.idAsignatura.nombre}" />
+								</p:column>
+								
+								<p:column headerText="Detalle">
+									<h:outputText value="#{matricula.idAsignatura.detalle}" />
+								</p:column>
+
+
+								<p:column style="width:3rem;text-align: center">
+									<p:button  icon="pi pi-search" outcome="listaAsistencias"
+										title="View">
+										<f:param name="i" value="2"/>
+										<f:param name="matricula" value="#{matricula.codigo}"/>
+										
+									</p:button>
+								</p:column>
+							</p:dataTable>
+						</div>
+					</h:form>
+					
+					
+				</div>
+			</div>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<f:facet name="first">
+		<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+		<title>Carrera</title>
+		<h:outputStylesheet name="style.css" library="css" />
+	</f:facet>
+</h:head>
+
+<h:body>
+	<ui:composition template="admin.xhtml" >
+		<ui:define name="contentAdmin">
+			<div style="height: 100%; padding: 1em;">
+				<h2>Carreras</h2>
+				<div class="card">
+					<h:form>
+						<p:growl id="msgs" showDetail="true"
+							skipDetailIfEqualsSummary="true" />
+
+							<div class="col-12">
+								<p:commandButton icon="pi pi-plus" title="View" oncomplete="PF('dlgCarrera').show()"
+									value="Nueva Carrera" styleClass="rounded-button ui-button-secondary"/>
+							</div>
+							
+						<div class="card">
+							<p:dataTable id="tblCarreras" var="carrera"
+								value="#{carreraView.carreras}" rowIndexVar="i">
+								<p:column headerText="N°">
+									<h:outputText value="#{i+1}" />
+								</p:column>
+
+								<p:column headerText="Carrera">
+									<h:outputText value="#{carrera.nombre}" />
+								</p:column>
+
+
+								<p:column style="width:10rem;text-align: center">
+									<p:commandButton style="margin-right:5px" title="Eliminar" icon="pi pi-trash" action="#{carreraView.eliminarCarrera(i)}" styleClass="rounded-button ui-button-danger" />
+									<p:commandButton title="Editar" icon="pi pi-pencil" action="#{carreraView.seleccionarCarrera(i)}" oncomplete="PF('dlgCarrera').show()" update="frmCarrera" styleClass="rounded-button ui-button-warning"/>
+								</p:column>
+								
+							</p:dataTable>
+						</div>
+					</h:form>
+					
+					<p:dialog header="Crear Carrera" widgetVar="dlgCarrera"
+						modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+						<p:outputPanel id="teacherDetail" style="text-align:center;">
+							<div class="card">
+								<h:form id="frmCarrera">
+									<h:panelGrid columns="2" cellpadding="5">
+						        	 	<div class="card">
+						        	 		<h:form>
+												<h5>Nombre de la carrera</h5>
+												<span class="ui-float-label">
+													<p:inputText id="txtCarrera" value="#{carreraView.carrera.nombre}" required="true">												
+													</p:inputText>
+												</span> 
+						        	 		</h:form>
+						        	 	</div>
+						            	</h:panelGrid>						            
+									<p:divider />
+
+									<p:commandButton value="Guardar"
+										action="#{carreraView.guardarCarrera}" icon="pi pi-save"
+										style="width: 50%" styleClass="rounded-button ui-button-success" >
+									</p:commandButton>
+								</h:form>
+							</div>
+						</p:outputPanel>
+					</p:dialog>
+					
+				</div>
+			</div>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

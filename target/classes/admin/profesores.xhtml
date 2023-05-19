@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<f:facet name="first">
+		<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+		<title>Profesores</title>
+		<h:outputStylesheet name="style.css" library="css" />
+	</f:facet>
+</h:head>
+<h:body>
+	<ui:composition template="admin.xhtml" >
+		<ui:define name="contentAdmin">
+			<div style="height: 100%; padding: 1em;">
+				<h2>Profesores</h2>
+				<div class="card">
+				
+					<h:form>
+						<p:growl id="msgs" showDetail="true"
+							skipDetailIfEqualsSummary="true" />
+
+							<div class="col-12">
+								<p:commandButton icon="pi pi-plus" title="View" oncomplete="PF('dlgProfesor').show()"
+									value="Nuevo Profesor" styleClass="rounded-button ui-button-secondary"/>
+							</div>
+							
+						<div class="card">
+							<p:dataTable id="tblProfesor" var="profesor"
+								value="#{profesoresView.profesores}" rowIndexVar="i">
+								<p:column headerText="N°">
+									<h:outputText value="#{i+1}" />
+								</p:column>
+
+								<p:column headerText="Cedula" filterBy="#{profesor.cedula}">									
+									<h:outputText value="#{profesor.cedula}" />
+								</p:column>
+								
+								<p:column headerText="Nombre">
+									<h:outputText value="#{profesor.apellido} #{profesor.nombre}" />
+								</p:column>
+								
+								<p:column headerText="Edad">
+									<h:outputText value="#{profesor.edad}" />
+								</p:column>
+								
+								<p:column headerText="Email">
+									<h:outputText value="#{profesor.email}" />
+								</p:column>
+								
+								<p:column headerText="Profesion">
+									<h:outputText value="#{profesor.profecion}" />
+								</p:column>
+
+								<p:column style="width:10rem;text-align: center">
+
+									<p:commandButton action="#{profesoresView.eliminarProfesor(i)}"
+									styleClass="rounded-button ui-button-danger" icon="pi pi-trash" style="margin-right: 5px;">
+										<p:confirm header="Confirmacion" message="Seguro de que quieres borrar este registro?"
+											icon="pi pi-info-circle" />
+									</p:commandButton>
+
+									<p:commandButton title="Editar" icon="pi pi-pencil"	action="#{profesoresView.seleccionarProfesor(i)}"
+										oncomplete="PF('dlgProfesor').show()" update="frmProfesor" styleClass="rounded-button ui-button-warning" />
+
+								</p:column>
+								
+							</p:dataTable>
+						</div>
+					</h:form>
+					
+					
+					<p:confirmDialog global="true" showEffect="fade" hideEffect="fade"
+						responsive="true" width="350">
+						<p:commandButton value="No" type="button"
+							styleClass="ui-confirmdialog-no ui-button-flat" />
+						<p:commandButton value="Yes" type="button"
+							styleClass="ui-confirmdialog-yes" />
+					</p:confirmDialog>
+					
+					
+					<p:dialog header="Crear Profesor" widgetVar="dlgProfesor"
+						modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+						<p:outputPanel id="teacherDetail" style="text-align:center;">
+
+
+
+							<div class="card">
+
+								<h:form id="frmProfesor">
+									<h5>Informacion del estudiante:</h5>
+									<span class="ui-float-label"> <p:inputText
+											id="txtNombre" value="#{profesoresView.profesor.nombre}"
+											required="true" /> <p:outputLabel for="@previous"
+											value="Nombre" />
+											<p:inputText id="txtApellido"
+											value="#{profesoresView.profesor.apellido}"
+											required="true" style="margin-left: 10px" /> <p:outputLabel
+											for="@previous" value="Apellido" style="margin-left: 210px" />
+									</span>
+									<br />
+									<span class="ui-float-label"> <p:inputText
+											id="txtCedula" value="#{profesoresView.profesor.cedula}"
+											required="true" type="number">
+											<f:validateLength maximum="10" minimum="10" />
+										</p:inputText> <p:outputLabel for="@previous" value="Cedula" /> <p:inputText
+											id="txtEmail" value="#{profesoresView.profesor.email}"
+											required="true" style="margin-left: 10px">
+											<f:validateRegex
+												pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+										</p:inputText> <p:outputLabel for="@previous" value="Email"
+											style="margin-left: 210px" />
+									</span>
+									<br/>
+									<span class="ui-float-label">
+										<p:inputText
+											id="txtEdad" value="#{profesoresView.profesor.edad}"
+											required="true"  type="number"/>
+											<p:outputLabel for="@previous" value="Edad" />
+										<p:inputText id="txtProfesion"
+											value="#{profesoresView.profesor.profecion}"
+											required="true" style="margin-left: 10px" /> <p:outputLabel
+											for="@previous" value="Profesion/Titulo" style="margin-left: 210px" />
+									</span>
+									<h5>Crear Usuario:</h5>
+									<span class="ui-float-label"> <p:inputText
+											id="txtUsuario" value="#{profesoresView.profesor.usuario}"
+											required="true" /> <p:outputLabel for="@previous"
+											value="Usuario" />
+											<p:inputText id="txtContraseña"
+											value="#{profesoresView.profesor.password}"
+											required="true" style="margin-left: 10px" /> <p:outputLabel
+											for="@previous" value="Contraseña" style="margin-left: 210px" />
+									</span>
+
+									<p:divider />
+
+									<p:commandButton value="Guardar"
+										action="#{profesoresView.guardarProfesor}"
+										icon="pi pi-save" style="width: 50%"
+										styleClass="rounded-button ui-button-success">
+									</p:commandButton>
+
+								</h:form>
+
+
+
+
+							</div>
+						</p:outputPanel>
+					</p:dialog>
+					
+					
+				</div>
+			</div>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

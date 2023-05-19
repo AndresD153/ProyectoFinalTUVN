@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<f:facet name="first">
+		<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+		<title>Notas</title>
+		<h:outputStylesheet name="style.css" library="css" />
+	</f:facet>
+</h:head>
+
+<h:body>
+	<ui:composition template="index.xhtml">
+		<ui:define name="content">
+			<div style="height: 100%; padding: 1em;">
+				<h2>
+					Notas de:
+					<h:outputText
+						value="#{editarNotasView.matricula.idAsignatura.nombre}" />
+				</h2>
+				<div class="card">
+					<h:form id="form">
+
+						<p:growl id="message" showDetail="true" />
+
+						<div class="grid mt-3">
+							<div class="col-12">
+								<p:commandButton icon="pi pi-plus" title="View"
+									value="Agregar Estudiante" oncomplete="PF('dlgNuevaNota').show()" />
+							</div>
+						</div>
+
+						<div class="card">
+							<p:dataTable id="tbleditarNota" var="nota"
+								value="#{editarNotasView.notas}" rowIndexVar="i" editable="true"
+								editMode="cell" widgetVar="cellNotas">
+
+								<p:ajax event="cellEdit"
+									listener="#{editarNotasView.editarCelda}"
+									update=":form:message" />
+
+								<p:column headerText="N°">
+									<h:outputText value="#{i+1}" />
+								</p:column>
+
+								<p:column headerText="Estudiante">
+									<h:outputText
+										value="#{nota.idMatriculaDetalle.idEstudiante.apellido} #{nota.idMatriculaDetalle.idEstudiante.nombre}" />
+								</p:column>
+
+								<p:column headerText="nota">
+									<p:cellEditor>
+										<f:facet name="output">
+											<h:outputText value="#{nota.nota}" />
+										</f:facet>
+										<f:facet name="input">
+											<p:inputNumber value="#{nota.nota}">
+												<f:validateLongRange minimum="0" maximum="10" />
+											</p:inputNumber>
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+
+							</p:dataTable>
+						</div>
+
+					</h:form>
+
+
+					<p:dialog header="Informacion de las Notas" widgetVar="dlgNuevaNota"
+						modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+						<p:outputPanel id="teacherDetail" style="text-align:center;">
+							<div class="card">
+								<h:form>
+									<h:panelGrid columns="2" cellpadding="5">
+										<div class="card">
+											<h:form>
+												<h5>Seleccione el Estudiante</h5>
+												<div class="col-12 md:col-6 lg:col-4 xl:col-3">
+													<p:selectOneListbox id="cbxTipoNota"
+														value="#{editarNotasView.idMatriculaDetalle}" filter="true"
+														filterMatchMode="contains">
+														<f:selectItems value="#{editarNotasView.estudiantes}" var="estudiante"
+															itemLabel="#{estudiante.idEstudiante.apellido} #{estudiante.idEstudiante.nombre}"
+															itemValue="#{estudiante.idMatriculaDetalle}" />
+													</p:selectOneListbox>
+												</div>
+											</h:form>
+										</div>
+									</h:panelGrid>
+
+
+									<p:divider />
+
+									<p:commandButton value="Guardar"
+										action="#{editarNotasView.crearNotaEstudiante}" icon="pi pi-save"
+										style="width: 50%">
+									</p:commandButton>
+								</h:form>
+							</div>
+						</p:outputPanel>
+					</p:dialog>
+
+				</div>
+			</div>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>
