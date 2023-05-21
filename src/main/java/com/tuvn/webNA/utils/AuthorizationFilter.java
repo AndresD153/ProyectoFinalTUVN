@@ -21,7 +21,8 @@ public class AuthorizationFilter implements Filter {
 		// TODO Auto-generated method stub
 		
 	}
-
+	
+	//Metodo para validar la sesion 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
@@ -33,6 +34,8 @@ public class AuthorizationFilter implements Filter {
             
             String reqURI = reqt.getRequestURI();
             
+            //--Comprobar si estamos ubicados en la pagina Login y verificar si la sesion esta activa
+            //--Si sesion esta activa redirecciona a la siguiente pagina, caso contrario retorna al Login 
             if(reqURI.indexOf("/login.xhtml") >= 0
             || (ses != null && ses.getAttribute("username") != null)
             || reqURI.indexOf("/public/") >= 0

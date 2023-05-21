@@ -3,7 +3,7 @@ package com.tuvn.webNA.controllers;
 import java.util.List;
 
 import com.tuvn.webNA.models.entities.Asignatura;
-
+//Definicion de los metodos de la intefaz AsignaturaController
 public interface AsignaturaController {
 	
 	public List<Asignatura> obtenerListaAsignatura();

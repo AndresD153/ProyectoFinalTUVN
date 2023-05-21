@@ -7,6 +7,7 @@ import com.tuvn.webNA.models.dao.AsignaturaDao;
 import com.tuvn.webNA.models.dao.impl.AsignaturaDaoImpl;
 import com.tuvn.webNA.models.entities.Asignatura;
 
+//Definicion de los metodos de la Implementacion de la clase AsignaturaController
 public class AsignaturaControllerImpl implements AsignaturaController{
 	
 	private AsignaturaDao asignaturaDao;

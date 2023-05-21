@@ -15,6 +15,7 @@ public class SessionsUtils {
         return (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
     }
 
+    //Metodo para obtener nombre de usuario
     public static String getUserName(){
         
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
@@ -22,6 +23,7 @@ public class SessionsUtils {
         return session.getAttribute("username").toString();
     }
 
+    //Metodo par obtener el ID del Usuaio
     public static String getUserId()
     {
         HttpSession session = getSession();

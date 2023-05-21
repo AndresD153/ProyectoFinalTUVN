@@ -66,6 +66,10 @@
 					
 					<p:dialog header="Crear Asignatura" widgetVar="dlgAsignatura"
 						modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+						
+						<!-- Linea para limpiar las cajas de texto del DIALOG -->
+						<p:ajax event="close" update="@all" listener="#{asignaturasView.limpiarObjeto}" />
+						
 						<p:outputPanel id="teacherDetail" style="text-align:center;">
 							<div class="card">
 								<h:form id="frmAsignatura">

@@ -31,7 +31,7 @@ import com.tuvn.webNA.models.entities.TipoNota;
 @ManagedBean
 @ViewScoped
 public class EditarNotasView implements Serializable{
-
+	
 	private static final long serialVersionUID = 1L;
 
 	private NotasController notasController;
@@ -55,6 +55,7 @@ public class EditarNotasView implements Serializable{
 	
 	@PostConstruct
 	public void init() {
+		//Inicialisar los objetos necesarios
 		notasController = new NotasControllerImpl();
 		matriculaDetalleController = new MatriculaDetalleControllerImpl();
 		matriculaController = new MatriculaControllerImpl();
@@ -68,6 +69,7 @@ public class EditarNotasView implements Serializable{
 	}
 	
 	public void reload() throws IOException {
+		//Funcion para recargar la pagina con parametros 
 		ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
 		ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURI()+"?i=1&matricula="+idMatricula+"&tipoNota="+idTipoNota);
 	}
@@ -77,6 +79,7 @@ public class EditarNotasView implements Serializable{
 	}
 	
 	private String getIdMatricula() {
+		//Obtener el ID de la Matricula atravez de la URL 
 		FacesContext facesContext = FacesContext.getCurrentInstance();
 		Map<String, String> params = facesContext.getExternalContext().getRequestParameterMap(); 
 		String getParam = params.get("matricula");
@@ -84,26 +87,30 @@ public class EditarNotasView implements Serializable{
 	}
 	
 	private Integer getIdTipoNota() {
+		//Obtener el ID de TipoNota atravez de la URL
 		FacesContext facesContext = FacesContext.getCurrentInstance();
 		Map<String, String> params = facesContext.getExternalContext().getRequestParameterMap(); 
 		String getParam = params.get("tipoNota");
 		return Integer.parseInt(getParam);
 	}
 	
-	public void editarCelda(CellEditEvent<Object> event) {		
+	public void editarCelda(CellEditEvent<Object> event) {	
+		//Obtener el antiguo valor y el nuevo valor
 		Object oldValue = event.getOldValue();
         Object newValue = event.getNewValue();
+        //Obtener el Index de la celda seleccionada
         Integer i = event.getRowIndex();
-        
+        //Obtener el objeto nota mediante el Index
         nota = notas.get(i);
         
         nota.setNota(Double.parseDouble(newValue.toString()));
-        
+        //Llamar a la accion actualizaNotaa
         notasController.actualizarNotas(nota);
         
         System.out.println(nota);
-
+        //Verificar si el valor nuevo no es nulo y el valor nuevo no es igual al antiguo
         if (newValue != null && !newValue.equals(oldValue)) {
+        	//En caso de cumplir con la afirmacion propuesta enviar una alerta
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Nota Actualizada");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
@@ -116,31 +123,36 @@ public class EditarNotasView implements Serializable{
 	}
 	
 	public void crearNotaEstudiante() throws IOException {
+		//Obtener a traves de la lista Notas el objeto simple Nota a partir del IdMatriculaDetalle 
 		Notas n = notas.stream().filter(item -> item.getIdMatriculaDetalle().getIdMatriculaDetalle().equals(idMatriculaDetalle))
 				.limit(1)
 				.findFirst().orElse(null);
-		
+		//Verificar que el objeto nota no sea nullo
 		if(n!=null) {
+			//Si es nullo enviar una alerta
 			FacesContext.getCurrentInstance().addMessage(null, 
 			new FacesMessage(FacesMessage.SEVERITY_ERROR,"Nota duplicada", "Nota ya asignada"));
 		}else {
+			//Buscar el tipo nota requerido
 			TipoNota tn = tipoNotaController.buscarPorId(idTipoNota);
+			//A traves de la lista estudiantes buscar por ID la matriculaDetalle y guardarlo en un objeto simple MatriculaDetalle "md"
 			MatriculaDetalle md = estudiantes.stream().filter(item -> item.getIdMatriculaDetalle().equals(idMatriculaDetalle))
 					.limit(1)
 					.findFirst().orElse(null);
-			
+			//Inicialisar notas y editarlas con parametros por defecto
 			Notas not = new Notas();
 			not.setIdMatriculaDetalle(md);
 			not.setIdTipoNota(tn);
 			not.setNota(0.0);
-			
+			//Llamar a la accion crear notas
 			notasController.crearNotas(not);
 			
 			reload();
 		}
 	}
 	
-	//-----------------------------------------------------------------------------------------------------------	
+	
+	//-------------------------------- Get y Set -----------------------------------	
 	//-------------------------------------------
 	public List<Notas> getNotas() {
 		return notas;

@@ -14,7 +14,7 @@ public class ProfesorDaoImpl extends GenericaDaoImpl<Profesor> implements Profes
 	public List<Profesor> obtenerListaProfesor() {
 		try{
 			TypedQuery<Profesor> consulta = this.entityManager.
-					createQuery("SELECT p FROM Profesor p WHERE p.estado = 1 ORDER BY p.idProfesor ASC", Profesor.class);
+					createQuery("SELECT p FROM Profesor p WHERE p.estado = 1 ORDER BY p.idProfesor DESC", Profesor.class);
 			return consulta.getResultList();
 		}catch (Exception e) {
 			//---ver el error

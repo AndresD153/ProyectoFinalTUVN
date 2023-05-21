@@ -39,8 +39,11 @@ public class MatriculaDetalleView implements Serializable{
 	private MatriculaDetalleController matriculaDetalleController;
 	
 	private List<Carrera> carreras;
+	//Declarar el objeto estudianteFuente "Objeto del cual salen los datos de origen "
 	private List<Estudiante> estudiantesFuente;
+	//Declarar el objeto estudianteObjetivo "objeto en el cual se crearan datos de manera temporal y es modificable"
 	private List<Estudiante> estudianteObjetivo;
+
 	private List<Estudiante> listaTemp;
 
 
@@ -57,6 +60,7 @@ public class MatriculaDetalleView implements Serializable{
 	
 	@PostConstruct
 	public void init() {
+		//Inicialisar los objetos necesarios
 		matriculaDetalleController = new MatriculaDetalleControllerImpl();
 		carreraController = new CarreraControllerImpl();
 		matriculaController = new MatriculaControllerImpl();
@@ -72,6 +76,7 @@ public class MatriculaDetalleView implements Serializable{
 	}
 	
 	private String getId() {
+		//Funcion para obtener el Id de la matricula
 		FacesContext facesContext = FacesContext.getCurrentInstance();
 		Map<String, String> params = facesContext.getExternalContext().getRequestParameterMap(); 
 		String getParam = params.get("matricula");
@@ -91,22 +96,27 @@ public class MatriculaDetalleView implements Serializable{
 	}
 	
 	public void agregarEstudiante() {
-		
+
 		matriculaDetalle = matriculaDetalleController.verificarMatricula(estudiante.getIdEstudiante(), matricula.getIdMatricula());
 
+		//Validar que el objeto MatriculaDetalle contenga no datos "es decir que el estudiante no este matriculado"
 		if(matriculaDetalle.getIdMatriculaDetalle() == null) {
+			//Agregar el estudiante a la matricula
 			estudianteObjetivo.add(estudiante);
 		}else {
+			//Caso contrario enviar una alerta
 			FacesContext.getCurrentInstance().addMessage(null, 
 		     new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error", "Estudiante ya matriculado"));
 		}
 		
+		//Al finalizar la operacion inicialisar los objetos
 		estudiante = new Estudiante();
 		matriculaDetalle = new  MatriculaDetalle();
 		
 	}
 	
 	public void removerEstudiante (Integer i) {
+		//Remover los estudianmtes de la lista estudianteObjetivo atravez del Index
 		estudiante = estudianteObjetivo.get(i);
 		estudianteObjetivo.remove(estudiante);
 		listaTemp.add(estudiante);
@@ -116,18 +126,24 @@ public class MatriculaDetalleView implements Serializable{
 	public void guardar() throws IOException{
 		
 		eliminarEstudianteMatricula();
+		//Validar que la listaObjetivo contenga 5 estudiantes para continuar 
 		if(estudianteObjetivo.size() >= 5) {
 			
 			matriculaDetalle = new MatriculaDetalle();
 			
+			//Inicialisar un bucle con el numero de elementos disponibles en el array listaObjetivo			
 			estudianteObjetivo.forEach(item -> {
 				matriculaDetalle = matriculaDetalleController.verificarMatricula(item.getIdEstudiante(), matricula.getIdMatricula());
 				
+				//Validar que la matriculaDetalle aun no exista
 				if(matriculaDetalle.getIdMatriculaDetalle() == null) {
+					//Actualizar el objeto matriculaDetalle con la infromacion requerida
 					matriculaDetalle.setIdEstudiante(item);
 					matriculaDetalle.setIdMatricula(matricula);
+					//Llamar a la accion crear
 					matriculaDetalleController.crearMatriculaDetalle(matriculaDetalle);					
 				}else {
+					//Si existe se mandara una alerta
 					System.out.println("No se pudo ingresar id = "+ item.getIdEstudiante());
 				}
 				
@@ -142,7 +158,9 @@ public class MatriculaDetalleView implements Serializable{
 	}
 	
 	public void eliminarEstudianteMatricula() {
+		//Funcion para eliminar a los estudiantes matriculados solo se cambia el estado y no se visualiza
 		if(listaTemp.size() > 0 && estudianteObjetivo.size() >= 5) {
+			//Eliminar a los estudiantes empleando un bucle
 			for (int i = 0; i < listaTemp.size(); i++) {
 				Estudiante item = listaTemp.get(i);
 				matriculaDetalle = matriculaDetalleController.verificarMatricula(item.getIdEstudiante(), matricula.getIdMatricula());
@@ -156,18 +174,19 @@ public class MatriculaDetalleView implements Serializable{
 	
 	private void cargarEstudiantesMatriculados() {
 		List<MatriculaDetalle> estudiantesMatriculados;
+		//Llamar a los estudiantes matriculados
 		estudiantesMatriculados = matriculaDetalleController.obtenerListaMatriculaDetalle(matricula.getIdMatricula());
-		
-		
+		//Validar que la lista de estudianmtes matriculados sea mayor que 0
 		if(estudiantesMatriculados.size() > 0) {
+			//Obtener el tamaño de la lista 0
 			Integer size = estudiantesMatriculados.size();
-
+			//Realizar un bucle para llenar la ListaObjetivo con los estudiantes matriculados
 			for (int i = 0; i < size; i++) {
 				estudiante = estudiantesMatriculados.get(i).getIdEstudiante();
 				estudianteObjetivo.add(estudiante);
 
 			}
-			
+			//Al finalizar inicialisar el objeto estudiante
 			estudiante = new Estudiante();
 		}
 	}
@@ -179,7 +198,9 @@ public class MatriculaDetalleView implements Serializable{
 
 	}
 	
-	//----
+	//-----------------------------------------------------------------------
+	//------------------Metodos GET y SET -----------------------------------
+	//-----------------------------------------------------------------------
 	public List<Carrera> getCarreras() {
 		return carreras;
 	}

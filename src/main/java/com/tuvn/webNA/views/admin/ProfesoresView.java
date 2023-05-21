@@ -89,7 +89,7 @@ public class ProfesoresView implements Serializable{
 			reload();
 			
 		} catch (Exception e) {
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "No se guardo el dato", "No se guardo el dato");
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "No se guardo el dato C.I Duplicada", "No se guardo el dato C.I Duplicada");
             FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 	}

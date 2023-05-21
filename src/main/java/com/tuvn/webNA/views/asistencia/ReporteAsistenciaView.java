@@ -66,10 +66,11 @@ public class ReporteAsistenciaView implements Serializable{
         HorizontalBarChartDataSet hbarDataSet = new HorizontalBarChartDataSet();
         hbarDataSet.setLabel("Dias asistidos");
         
+        //Inicialisar los valores y los titulos
         List<Number> values = new ArrayList<>();
         List<String> labels = new ArrayList<>();
 
-
+        //Llenar el grafico con los datos requeridos
         for (int i=0; i< listaAsistencias.size(); i++){
 
 	        Object[] row = (Object[]) listaAsistencias.get(i);
@@ -88,6 +89,7 @@ public class ReporteAsistenciaView implements Serializable{
         data.setLabels(labels);
         hbarModel.setData(data);
 
+        //Crear los colores para las barras
         List<String> bgColor = new ArrayList<>();
         bgColor.add("rgba(255, 99, 132, 0.2)");
         bgColor.add("rgba(255, 159, 64, 0.2)");
@@ -98,6 +100,7 @@ public class ReporteAsistenciaView implements Serializable{
         bgColor.add("rgba(201, 203, 207, 0.2)");
         hbarDataSet.setBackgroundColor(bgColor);
 
+        //Generar los colores de los bordes de las barras
         List<String> borderColor = new ArrayList<>();
         borderColor.add("rgb(255, 99, 132)");
         borderColor.add("rgb(255, 159, 64)");
@@ -111,7 +114,7 @@ public class ReporteAsistenciaView implements Serializable{
 
         data.addChartDataSet(hbarDataSet);
 
-        //Options
+        //Inicialisar las opciones de personalizacion para el grafico
         BarChartOptions options = new BarChartOptions();
         CartesianScales cScales = new CartesianScales();
         CartesianLinearAxes linearAxes = new CartesianLinearAxes();
@@ -122,6 +125,7 @@ public class ReporteAsistenciaView implements Serializable{
         cScales.addXAxesData(linearAxes);
         options.setScales(cScales);
 
+        //Editar los titulos y subtitulos
         Title title = new Title();
         title.setDisplay(true);
         title.setText("Reporte de asistencias");

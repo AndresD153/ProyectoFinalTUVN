@@ -85,6 +85,10 @@
 					
 					<p:dialog header="Crear Profesor" widgetVar="dlgProfesor"
 						modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+						
+						<!-- Linea para limpiar las cajas de texto del DIALOG -->
+						<p:ajax event="close" update="@all" listener="#{profesoresView.limpiarObjeto}" />
+						
 						<p:outputPanel id="teacherDetail" style="text-align:center;">
 
 

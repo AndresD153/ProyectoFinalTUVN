@@ -19,21 +19,26 @@ import javax.persistence.Table;
 
 //Defnir el nombre de la entidad con anotaciones
 @Entity
+//Definir el alias de la tabla en la base de datos
 @Table(name = "matricula")
 public class Matricula implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
-	//Definir el ID con la primary key y autoicremtable
+	////Anotacion para definir la pimaryKey, con un autoincrementable y definir su nombre en la base de datos
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_matricula")
 	private Integer idMatricula;
 	
+	//Definir la estructura de una relacion muchos a uno 
 	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+	//Anexar el campo IdProfesor con la tabla Profesor
 	@JoinColumn(name = "id_profesor")
+	//Definir un oibjeto simple de Profesor
 	private Profesor idProfesor;
 	
+	//Relacion de Muchos a Uno con la tabla asignatura
 	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_asignatura")
 	private Asignatura idAsignatura;

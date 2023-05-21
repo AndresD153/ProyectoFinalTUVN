@@ -62,7 +62,7 @@ public class TipoNotaView implements Serializable{
 		try {
 			
 			tipoNota = tipoNotas.get(i);
-			tipoNota.setTipoEstado(0);
+			tipoNota.setTipoEstado(1);
 			
 			tipoNotaController.actualizarTipoNota(tipoNota);
 			

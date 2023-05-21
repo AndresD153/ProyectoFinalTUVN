@@ -54,6 +54,7 @@ public class NotasView implements Serializable{
 
 	@PostConstruct
 	public void init () {
+		//Inicialisar los objetos necesarios
 		tipoNotaController = new TipoNotaControllerImpl();
 		notasController = new NotasControllerImpl();
 		matriculaDetalleController = new MatriculaDetalleControllerImpl();
@@ -72,6 +73,7 @@ public class NotasView implements Serializable{
 	}
 	
 	private String getId() {
+		//Obtener el ID de la Matricula atravez de la URL 
 		FacesContext facesContext = FacesContext.getCurrentInstance();
 		Map<String, String> params = facesContext.getExternalContext().getRequestParameterMap(); 
 		String getParam = params.get("matricula");
@@ -85,26 +87,35 @@ public class NotasView implements Serializable{
 	public void crearNotas() {		
 		
 		try {
+			//Realizar la buqueda de la nota requerida con lo parametros IdMatricula y IdTipoNota 
 			nota = notasController.verificarTipoNota(matricula.getIdMatricula(), idTipoNota);
 			
+			//Verificar si la nota existe
 			if(nota.getIdNotas() != null) {
+				//Si no existe forzar una excepcion 
 				throw new Exception();
 			}else {
+				//Buscar el tipo de nota  
 				tipoNota = tipoNotaController.buscarPorId(idTipoNota);
+				//Bucsar la lista de estudiante matriculados a traves del Id de la Matricula 
 				matriculas = matriculaDetalleController.obtenerListaMatriculaDetalle(matricula.getIdMatricula());
 				
+				//Recorre la lista de los estudiantes matriculados
 				matriculas.forEach(item -> {
+					//Define una nueva nota 
 					nota = new Notas();
+					//Realiza los cambios con la informcaion requerida
 					nota.setIdTipoNota(tipoNota);
 					nota.setNota(0.0);
 					nota.setIdMatriculaDetalle(item);
-					
+					//Llama la funcion crear Nota
 					notasController.crearNotas(nota);
 				});
 				
 				reload();
 			}
 		} catch (Exception e) {
+			//Despliega una alerta en caso de que alla ocurrido un error
 			FacesContext.getCurrentInstance().addMessage(null, 
 				     new FacesMessage(FacesMessage.SEVERITY_ERROR,"Nota Existente", "Estudiante ya matriculado"));
 		}
@@ -119,7 +130,8 @@ public class NotasView implements Serializable{
 		ec.redirect(((HttpServletRequest) ec.getRequest()).getRequestURI()+"?i=1&matricula="+matricula.getCodigo());
 	}
 	
-	//----------
+	//----------------------------------------------------------------
+	//------------------ gEt y Set -----------------------------------
 
 	public List<TipoNota> getTipoNotas() {
 		return tipoNotas;

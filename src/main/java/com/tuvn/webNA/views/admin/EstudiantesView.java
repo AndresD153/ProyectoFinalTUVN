@@ -106,13 +106,16 @@ public class EstudiantesView implements Serializable{
 			if(estudiante.getIdEstudiante() != null) {
 				estudianteController.actualizarEstudianmte(estudiante);
 			}else {
-				estudianteController.crearEstudiante(estudiante);
+				Boolean validar = estudianteController.crearEstudiante(estudiante);
+				if(validar == false) {
+					throw new Exception();
+				}
 			}
 			limpiarObjeto();
 			reload();
 			
 		} catch (Exception e) {
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "No se guardo el dato", "No se guardo el dato");
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "No se guardo el dato C.I Duplicada", "No se guardo el dato C.I Duplicada");
             FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
 	}

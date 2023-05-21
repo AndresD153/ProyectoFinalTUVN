@@ -35,7 +35,6 @@ public class LoginView implements Serializable{
 		
 	}
 	
-	//--Iniciador / para no digitar codigo e el constructor
 	@PostConstruct
 	public void init() {
 		profesorController = new ProfesorControllerImpl();
@@ -43,15 +42,22 @@ public class LoginView implements Serializable{
 	
 	public void iniciarSesion() {	
 		try {
+			//Llenar el objeto profesor con la informacion requerida "usuario y password"
 			profesor = profesorController.iniciarProfesor(username, password);
 			
+			//Validar que el objeto Profesor contenga datos 
+			//si es nullo generara una excepcion 
 			if(profesor.getIdProfesor()!=null) {
+				
+				//Si el Profesor contiene datos inisializa la sesion con los datos ingresados
 				HttpSession session = SessionsUtils.getSession();
                 session.setAttribute("username", profesor.getIdProfesor().toString());
                 
+                //Se envia una notificacion 
                 FacesContext.getCurrentInstance().addMessage(null, 
                         new FacesMessage(FacesMessage.SEVERITY_INFO,"Info", "Session Iniciada"));
                 
+                //Valida el rol del usuario "Admin o Profesor"
                 if(profesor.getRol()==1) {
                 	redirectLogin("pages/index.xhtml");      
                 	
@@ -66,6 +72,7 @@ public class LoginView implements Serializable{
 			}
 			
 		}catch (Exception e) {
+			//Si existe excepcion mandar un mensaje de adbertencia
 			FacesContext.getCurrentInstance().addMessage(null, 
                     new FacesMessage(FacesMessage.SEVERITY_WARN,"Avertencia", "Usuario o Password incorrectos"));
 		}
@@ -73,20 +80,23 @@ public class LoginView implements Serializable{
 	
 	
 	public void redirectLogin(String redirect) throws IOException {
-
+		//Redirecciona a la pagina solicitada
 		ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
 		ec.redirect(redirect);
 
 	}
 	
 	public void cerrarSesion() throws IOException {
+		//Destruye la sesion creada
 		HttpSession session = SessionsUtils.getSession();
 		session.invalidate();
 		
+		//Redirecciona al login
 		redirectLogin("../login.xhtml");
 	}
 	
 
+	//-------------------------------- GEt y Set ----------------------
 	public String getUsername() {
 		return username;
 	}

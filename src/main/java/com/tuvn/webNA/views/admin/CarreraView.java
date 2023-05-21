@@ -64,7 +64,7 @@ public class CarreraView implements Serializable{
 		
 	}
 	
-	private void limpiarObjeto() {
+	public void limpiarObjeto() {
 		 carrera = new Carrera();
 	}
 	

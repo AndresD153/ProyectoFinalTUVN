@@ -12,7 +12,9 @@ public class GenericaDaoImpl<T> implements GenericaDao<T>{
 	
 private Class<T> entityClass;
     
+	//Inicialisar el entityManagerFactory utilizando el proyectoNA para la creacion de la base de datos
     protected static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("proyectoNA");
+    //Inicialisar el entityManager
     protected EntityManager entityManager;
 
     public GenericaDaoImpl()
@@ -29,6 +31,7 @@ private Class<T> entityClass;
     //Definimos el CRUD
     public T create(T t)
     {
+    	//Definicion para crear la persitencia de datos 
         this.entityManager.persist(t);
         return t;
     }
@@ -40,11 +43,13 @@ private Class<T> entityClass;
     
     public T update (T t)
     {
+    	//Definicion del metodo para realizar la actualizacion de datos
         return this.entityManager.merge(t);
     }
     
     public void delete(T t)
     {
+    	//Definicion del metodo para realizar la eliminacion de datos
         t = this.entityManager.merge(t);
         this.entityManager.remove(t);
     }
@@ -61,6 +66,7 @@ private Class<T> entityClass;
     
     public void commit()
     {
+    	//Funcion para confirmar las transacciones
         if(entityManager.getTransaction().isActive())
             entityManager.getTransaction().commit();
     }

@@ -18,9 +18,10 @@ public class EstudianteControllerImpl implements EstudianteController{
 	}
 
 	@Override
-	public void crearEstudiante(Estudiante estudiante) {
+	public boolean crearEstudiante(Estudiante estudiante) {
 		estudianteDao = new EstudianteDaoImpl();
-		estudianteDao.crearEstudiante(estudiante);		
+		return estudianteDao.crearEstudiante(estudiante);
+		
 	}
 
 	@Override

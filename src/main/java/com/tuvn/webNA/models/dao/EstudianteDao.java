@@ -10,7 +10,7 @@ public interface EstudianteDao {
 	
 	public List<Estudiante> obtenerEstudiantesCarrera(Integer idCarrera);
 	
-	public void crearEstudiante(Estudiante estudiante);
+	public boolean crearEstudiante(Estudiante estudiante);
 	
 	public void actualizarEstudianmte(Estudiante estudiante);
 	

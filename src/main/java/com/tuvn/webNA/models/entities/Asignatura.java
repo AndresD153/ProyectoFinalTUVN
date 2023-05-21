@@ -13,13 +13,15 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-//Defnir el nombre de la entidad con anotaciones
+//Anotacion para definir la clase como entidad
 @Entity
+//Definir el alias de la tabla en la base de datos
 @Table(name = "asignatura")
 public class Asignatura implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
+	//Anotacion para definir la pimaryKey, con un autoincrementable y definir su nombre en la base de datos
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_asignatura")
@@ -34,6 +36,7 @@ public class Asignatura implements Serializable{
 	@Column(nullable = false, length = 1)
 	private Integer estado = 1;
 	
+	//Crear una relacion Uno a Muchos con el campo IdAsignatura que se encuentra en la tabla Matricula
 	@OneToMany(cascade = CascadeType.REFRESH, mappedBy = "idAsignatura")
 	private List<Matricula> lstMatricula = new ArrayList<Matricula>();
 	
@@ -41,6 +44,9 @@ public class Asignatura implements Serializable{
 		
 	}
 
+	//--------------------------------------------------------------------
+	//--------------Metodos GET y SET ------------------------------------
+	//--------------------------------------------------------------------
 	public Integer getIdAsignatura() {
 		return idAsignatura;
 	}

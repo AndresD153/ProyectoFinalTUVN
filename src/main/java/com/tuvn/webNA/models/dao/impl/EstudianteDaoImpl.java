@@ -23,13 +23,15 @@ public class EstudianteDaoImpl extends GenericaDaoImpl<Estudiante> implements Es
 	}
 
 	@Override
-	public void crearEstudiante(Estudiante estudiante) {
+	public boolean crearEstudiante(Estudiante estudiante) {
 		try {
 			this.beginTransaction();
 			this.create(estudiante);
 			this.commit();
+			return true;
 		} catch (Exception e) {
 			this.rollback();
+			return false;
 		}
 		
 	}

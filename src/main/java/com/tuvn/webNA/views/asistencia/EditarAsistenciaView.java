@@ -58,6 +58,7 @@ public class EditarAsistenciaView implements Serializable{
 	
 	@PostConstruct
 	public void init () {
+		//inicializar los objetos necesarios
 		asistenciaController = new AsistenciaControllerImpl();
 		fechaAsistenciaController = new FechaAsistenciaControllerImpl();
 		matriculaDetalleController = new MatriculaDetalleControllerImpl();
@@ -72,6 +73,7 @@ public class EditarAsistenciaView implements Serializable{
 	}
 	
 	private String getId() {
+		//Obtener el IdMatricula desde el URL
 		FacesContext facesContext = FacesContext.getCurrentInstance();
 		Map<String, String> params = facesContext.getExternalContext().getRequestParameterMap(); 
 		String getParam = params.get("matricula");
@@ -79,6 +81,7 @@ public class EditarAsistenciaView implements Serializable{
 	}
 	
 	private Integer getIdFecha() {
+		//Obtener la Fecha desde el URL
 		FacesContext facesContext = FacesContext.getCurrentInstance();
 		Map<String, String> params = facesContext.getExternalContext().getRequestParameterMap(); 
 		Integer getParam = Integer.parseInt(params.get("fecha"));
@@ -99,34 +102,43 @@ public class EditarAsistenciaView implements Serializable{
 		int month = c.get(Calendar.MONTH);
 		int day = c.get(Calendar.DATE);
 
+		//Concatenar la respuestas y mostrar en el fomato correcto
 		String dateString = String.valueOf(year)+"-"+String.valueOf(month)+"-"+String.valueOf(day);
 
 		return dateString;
 	}
 	
 	private void listarFechaEstudiante() {
+		//Obtener la lista de estudiantes con el id de la fecha y el IdMatricula
 		asistencias = asistenciaController.obtenerListaAsistenciaEstudiante(idFecha, idMatricula);
 	}
 	
+	//Metodo para editar celdas cuyo parametro extrae un evento llamado CellEditEvent 
 	public void editarCelda(CellEditEvent<Object> event) {		
+		//Extraer el valor antiguo 
 		Object oldValue = event.getOldValue();
+		//Extraer el valor modificado
         Object newValue = event.getNewValue();
+        //Obtener el Index de la lista
         Integer i = event.getRowIndex();
-        
+        //Obtener el objeto Asitencia apartir del Index
         asistencia = asistencias.get(i);
-        
+        //Actualizar el objeto asistencia con el nuevo valor 
         asistencia.setAsistencia(Integer.parseInt(newValue.toString()));
-
+        
+        //Validar que el nuevo valor no sea nulo o sea igual al anterior
         if (newValue != null && !newValue.equals(oldValue)) {
+        	//Realizar la accion de actualizar la asitencia
         	asistenciaController.actualizarAsistencia(asistencia);
-            System.out.println(asistencia);
-            
+
+        	//Mandar un mensaje o notificaion de la asitencia
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Asistencia Actualizada");
             FacesContext.getCurrentInstance().addMessage(null, msg);
         }
 	}
 	
 	public String mostrarDetalle(Integer est) {
+		//Mostrar el detalle de la asistencia validado atravez de un numero
 		if(est == 0) {
 			return "Falta";
 		}else if(est == 1) {
@@ -141,25 +153,33 @@ public class EditarAsistenciaView implements Serializable{
 		estudiantes = matriculaDetalleController.obtenerListaMatriculaDetalle(matricula.getIdMatricula());
 	}
 	
+	//Metodo para Insertar una nueva asistencia en caso de no haberse matriculado previamente 
 	public void crearAsistenciaEstudiante() throws IOException {
+		//Filtrar la lista asitencias para mostrar unicamente el primer valor
 		Asistencia a = asistencias.stream().filter(item -> item.getIdMatriculaDetalle().getIdMatriculaDetalle().equals(idMatriculaDetalle))
 				.limit(1)
 				.findFirst().orElse(null);
 		
+		//Validar si el objeto A "asitencia" es nullo es decir esta asitencia no a sido generada aun
 		if(a!=null) {
-			FacesContext.getCurrentInstance().addMessage(null, 
-			new FacesMessage(FacesMessage.SEVERITY_ERROR,"Asistencia duplicada", "Nota ya asignada"));
+			//Si es nullo mostrar una notificacion 
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Asistencia ya registrada", "Porque ya existe");
+			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}else {
+			//Buscar la fechaAsitencia 
 			FechaAsistencia fa = fechaAsistenciaController.buscarPorId(idFecha);
+			//Obtener la matricula detalle del estudiante matriculado recientemente
 			MatriculaDetalle md = estudiantes.stream().filter(item -> item.getIdMatriculaDetalle().equals(idMatriculaDetalle))
 					.limit(1)
 					.findFirst().orElse(null);
-			
+			//Inicialisar un nuevo objeto asistencia
 			Asistencia asi = new Asistencia();
+			//Actualizar con los nuevos datos extraidos
 			asi.setIdMatriculaDetalle(md);
 			asi.setAsistencia(2);
 			asi.setIdFechaAsistencia(fa);
 			
+			//Llamar a la accion crearAsitencia 
 			asistenciaController.crearAsistencia(asi);
 			
 			reload();

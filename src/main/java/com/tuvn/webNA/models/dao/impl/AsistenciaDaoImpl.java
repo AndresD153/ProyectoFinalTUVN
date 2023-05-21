@@ -111,7 +111,7 @@ public class AsistenciaDaoImpl extends GenericaDaoImpl<Asistencia> implements As
 		try{
 			TypedQuery<Object> consulta = this.entityManager
 					.createQuery("SELECT a.idMatriculaDetalle.idEstudiante.apellido, a.idMatriculaDetalle.idEstudiante.nombre, COUNT(a.idMatriculaDetalle.idEstudiante.idEstudiante) FROM Asistencia a "
-							+ "WHERE a.idMatriculaDetalle.idMatricula.codigo = :cod "
+							+ "WHERE a.idMatriculaDetalle.idMatricula.codigo = :cod AND (a.asistencia = 2 OR a.asistencia = 1)"
 							+ "GROUP BY a.idMatriculaDetalle.idEstudiante.apellido, a.idMatriculaDetalle.idEstudiante.nombre, a.idMatriculaDetalle.idEstudiante.idEstudiante" , Object.class);
 			consulta.setParameter("cod", idMatricula);
 			return consulta.getResultList();
